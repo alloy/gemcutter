@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100817182653) do
+ActiveRecord::Schema.define(:version => 20101005202603) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -110,6 +110,9 @@ ActiveRecord::Schema.define(:version => 20100817182653) do
     t.datetime "updated_at"
     t.boolean  "email_reset"
     t.string   "handle"
+    t.string   "website"
+    t.string   "location"
+    t.text     "bio"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
