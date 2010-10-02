@@ -51,4 +51,10 @@ module RubygemsHelper
   def documentation_path(version)
     "http://rubydoc.info/gems/#{version.rubygem.name}/#{version.number}/frames"
   end
+
+  def links_to_owners(rubygem)
+    rubygem.owners.sort_by(&:handle).map do |owner|
+      link_to owner.handle, user_rubygems_path(owner)
+    end.join(", ").html_safe
+  end
 end
