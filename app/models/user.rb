@@ -19,8 +19,9 @@ class User < ActiveRecord::Base
   after_update :deliver_email_reset, :if => :email_reset
 
   validates_uniqueness_of :handle, :allow_nil => true
-  validates_format_of :handle, :with => /\A[A-Za-z][A-Za-z_\-0-9]*\z/, :allow_nil => true
-  validates_length_of :handle, :within => 3..15, :allow_nil => true
+  validates_presence_of :handle, :unless => proc { |user| user.handle.nil? } # :allow_nil => true doesn't work
+  validates_format_of :handle, :with => /\A[A-Za-z][A-Za-z_\-0-9]*\z/, :allow_blank => true
+  validates_length_of :handle, :within => 3..15, :allow_blank => true
 
   def self.authenticate(who, password)
     if user = Rubyforger.transfer(who, password) || find_by_email(who) || find_by_handle(who)
