@@ -136,51 +136,50 @@ class RubygemsControllerTest < ActionController::TestCase
     end
   end
 
-  context "On GET to index with no parameters" do
+  context "On GET to index" do
     setup do
       @gems = (1..3).map do |n|
         gem = Factory(:rubygem, :name => "agem#{n}")
         Factory(:version, :rubygem => gem)
         gem
       end
-      Factory(:rubygem, :name => "zeta")
-      get :index
+      @another_gem = Factory(:rubygem, :name => "zeta")
     end
 
-    should respond_with :success
-    should render_template :index
-    should assign_to(:gems) { @gems }
-    should "render links" do
-      @gems.each do |g|
-        assert_contain g.name
-        assert_have_selector "a[href='#{rubygem_path(g)}']"
+    context "with no parameters" do
+      setup do
+        get :index
+      end
+
+      should respond_with :success
+      should render_template :index
+      should assign_to(:gems) { @gems } # this does not work!
+      should "render links" do
+        @gems.each do |g|
+          assert_contain g.name
+          assert_have_selector "a[href='#{rubygem_path(g)}']"
+        end
+      end
+      should "display uppercase A" do
+        assert_contain "starting with A"
       end
     end
-    should "display uppercase A" do
-      assert_contain "starting with A"
-    end
-  end
 
-    context "On GET to index nested under a user resource" do
-    setup do
-      @user = Factory(:email_confirmed_user)
-      @gems = (1..3).map do |n|
-        gem = Factory(:rubygem, :name => "agem#{n}")
-        gem.ownerships.create(:user => @user, :approved => true)
-        Factory(:version, :rubygem => gem)
-        gem
+    context "nested under a user resource" do
+      setup do
+        @user = Factory(:email_confirmed_user)
+        @gems.each { |gem| gem.ownerships.create(:user => @user, :approved => true) }
+        Factory(:version, :rubygem => @another_gem)
+        get :index, :user_id => @user.to_param
       end
-      another_users_gem = Factory(:rubygem, :name => "another_users_gem")
-      Factory(:version, :rubygem => another_users_gem)
-      get :index, :user_id => @user.to_param
-    end
 
-    should respond_with :success
-    should render_template :index
-    #should assign_to(:gems) { @gems } # this does not work!
-    should "only select the users gems" do
-      assert_equal @user, assigns(:user)
-      assert_equal @gems, assigns(:gems)
+      should respond_with :success
+      should render_template :index
+      #should assign_to(:gems) { @gems } # this does not work!
+      should "only select the users gems" do
+        assert_equal @user, assigns(:user)
+        assert_equal @gems, assigns(:gems)
+      end
     end
   end
 
