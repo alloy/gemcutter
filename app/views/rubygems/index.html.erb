@@ -1,16 +1,20 @@
 <% @title = "all gems" %>
-<% @subtitle = "starting with <em>#{@letter}</em>" %>
+<% @subtitle = @user ? "by #{@user.handle}" : "starting with <em>#{@letter}</em>" %>
+<% unless @user %>
 <div class="directory border">
   <ol>
     <% ("A".."Z").each do |letter| %><li><%= link_to(letter, rubygems_path(:letter => letter)) %></li><% end %>
   </ol>
 </div>
+<% end %>
 <p class="entries">
   <%= page_entries_info @gems, :entry_name => 'gem' %>
 </p>
+<% unless @gems.empty? %>
 <div class="gems border">
   <ol>
     <%= render @gems %>
   </ol>
 </div>
+<% end %>
 <%= will_paginate @gems %>

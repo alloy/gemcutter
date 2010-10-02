@@ -6,8 +6,13 @@ class RubygemsController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @letter = Rubygem.letterize(params[:letter])
-        @gems   = Rubygem.letter(@letter).paginate(:page => params[:page])
+        @gems = if params[:user_id]
+          @user = User.find(params[:user_id])
+          @user.rubygems
+        else
+          @letter = Rubygem.letterize(params[:letter])
+          Rubygem.letter(@letter)
+        end.paginate(:page => params[:page])
       end
       format.atom do
         @versions = Version.published(20)

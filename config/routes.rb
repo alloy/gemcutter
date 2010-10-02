@@ -96,6 +96,7 @@ Gemcutter::Application.routes.draw do
   resources :users do
     resource :password, :only => [:create, :edit, :update]
     resource :confirmation, :only => [:new, :create]
+    resources :rubygems, :only => :index, :path => "gems"
   end
 
   ################################################################################
