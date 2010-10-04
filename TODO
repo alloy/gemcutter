@@ -1,4 +1,3 @@
 * if rubygems would be updated to take, on the gemspec, a list of associated authors and their email addresses, then we could simply link authors to their gems overview pages. Instead of having to add a ‘Owners’ paragraph. Currently, on the gemspec, the authors and email addresses are seperate fields.
-* User#handle validation, when blank, should just be ‘can’t be blank’
 * use ‘handle or id’ for /users/:id/gems ?
 * nest contexts in rubygems controller test for ‘On GET to show’?
